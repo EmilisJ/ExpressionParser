@@ -26,10 +26,11 @@ public class ExpressionParser {
             }
         }
 
-        // if( ")/*+".indexOf(expression.charAt(0)) != -1 || "-(/*+".indexOf(expression.charAt(expression.length()-1)) != -1){
-        //     IllegalArgumentException d = new IllegalArgumentException("Emilis, String starts or ends with invalid characters");
-        //     throw d;
-        // }
+        
+        if( ")/*+".indexOf(expression.charAt(0)) != -1 || "-(/*+".indexOf(expression.charAt(expression.length()-1)) != -1){
+            IllegalArgumentException d = new IllegalArgumentException("Emilis, String starts or ends with an invalid operator");
+            throw d;
+        }
 
         int openBracket = 0;
         int closeBracket = 0; 
@@ -72,8 +73,8 @@ public class ExpressionParser {
             // new TestParams("", 0),// empty string
             // new TestParams("2!3()/*-+", 0), // invalid characters
             // new TestParams("2-*/3/3-64", 0), // two or more operators in a row
-            new TestParams("(2(3+5)", 0),
-            // new TestParams("", 0),
+            // new TestParams("(2(3+5)", 0),
+            new TestParams(")2+2(", 0),
             // new TestParams("1", 1),
             // new TestParams("1+3", 4),
             // new TestParams("1+3", 4),
