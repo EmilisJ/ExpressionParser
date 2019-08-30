@@ -60,7 +60,6 @@ public class ExpressionParser {
             } 
         }
         cutText.add(number);
-        // System.out.println(cutText);
 
         if( cutText.size() == 1){
             result = Integer.parseInt(cutText.get(0));
@@ -76,6 +75,7 @@ public class ExpressionParser {
         // int iAddOp = cutText.indexOf("+");
         // int iSubOp = cutText.indexOf("-");
         // System.out.println(cutText);
+
         while(cutText.indexOf("*") != -1 || cutText.indexOf("/") != -1 ){
             if((cutText.indexOf("*") < cutText.indexOf("/") && cutText.indexOf("*") != -1) || cutText.indexOf("/") == -1){
                 result = Integer.valueOf(cutText.get(cutText.indexOf("*")-1)) * Integer.valueOf(cutText.get(cutText.indexOf("*")+1));
@@ -91,6 +91,7 @@ public class ExpressionParser {
                 System.out.println(cutText);
             }            
         }
+
         while(cutText.indexOf("+") != -1 || cutText.indexOf("-") != -1 ){
             if ((cutText.indexOf("+") < cutText.indexOf("-") && cutText.indexOf("+") != -1)  || cutText.indexOf("-") == -1){
                 result = Integer.valueOf(cutText.get(cutText.indexOf("+")-1)) + Integer.valueOf(cutText.get(cutText.indexOf("+")+1));
