@@ -65,76 +65,51 @@ public class ExpressionParser {
         if( cutText.size() == 1){
             result = Integer.parseInt(cutText.get(0));
         } 
+
+        if(cutText.get(0).equals("-")){
+            cutText.set(1, String.valueOf(Integer.valueOf(cutText.get(1)) * -1));
+            cutText.remove(cutText.get(0));
+        }
         
-        // int mult = cutText.indexOf("*");
-        // int div = cutText.indexOf("/");
-        // int add = cutText.indexOf("+");
-        // int sub = cutText.indexOf("-");
-        System.out.println(cutText);
-        while(cutText.size() > 1){
-            // for(int i = 0; i < cutText.size(); ++i){}
-            if(cutText.indexOf("*") != -1){
+        // int iMultiOp = cutText.indexOf("*");
+        // int iDivOp = cutText.indexOf("/");
+        // int iAddOp = cutText.indexOf("+");
+        // int iSubOp = cutText.indexOf("-");
+        // System.out.println(cutText);
+        while(cutText.indexOf("*") != -1 || cutText.indexOf("/") != -1 ){
+            if((cutText.indexOf("*") < cutText.indexOf("/") && cutText.indexOf("*") != -1) || cutText.indexOf("/") == -1){
                 result = Integer.valueOf(cutText.get(cutText.indexOf("*")-1)) * Integer.valueOf(cutText.get(cutText.indexOf("*")+1));
-                // System.out.println(Integer.valueOf(cutText.get(cutText.indexOf("*")-1)));
-                // System.out.println(Integer.valueOf(cutText.get(cutText.indexOf("*")+1)));
-                // System.out.println(result);
                 cutText.set(cutText.indexOf("*")-1, String.valueOf(result));
                 cutText.remove(cutText.indexOf("*")+1);
                 cutText.remove(cutText.indexOf("*"));
-            } else if(cutText.indexOf("*") == -1 && cutText.indexOf("/") != -1){
+                System.out.println(cutText);
+            } else if ((cutText.indexOf("/") < cutText.indexOf("*") && cutText.indexOf("/") != -1) || cutText.indexOf("*") == -1){
                 result = Integer.valueOf(cutText.get(cutText.indexOf("/")-1)) / Integer.valueOf(cutText.get(cutText.indexOf("/")+1));
-                // System.out.println(result);
                 cutText.set(cutText.indexOf("/")-1, String.valueOf(result));
                 cutText.remove(cutText.indexOf("/")+1);
                 cutText.remove(cutText.indexOf("/"));
-            } else{
-                if (cutText.indexOf("+") != -1){
-                    result = Integer.valueOf(cutText.get(cutText.indexOf("+")-1)) + Integer.valueOf(cutText.get(cutText.indexOf("+")+1));
-                    cutText.set(cutText.indexOf("+")-1, String.valueOf(result));
-                    cutText.remove(cutText.indexOf("+")+1);
-                    cutText.remove(cutText.indexOf("+"));
-                }
-                if (cutText.indexOf("-") != -1){
-                    result = Integer.valueOf(cutText.get(cutText.indexOf("-")-1)) - Integer.valueOf(cutText.get(cutText.indexOf("-")+1));
-                    cutText.set(cutText.indexOf("-")-1, String.valueOf(result));
-                    cutText.remove(cutText.indexOf("-")+1);
-                    cutText.remove(cutText.indexOf("-"));
-                }
-
-            }
-            // System.out.println(cutText.get(0));
-            // System.out.println(cutText.indexOf("*"));
-
+                System.out.println(cutText);
+            }            
         }
-
-        //     System.out.println(cutText);
-        //     // System.out.println(cutText.indexOf("*"));
-        // for(int i = 1; i < cutText.size()-1; ++i){
-        //     int a = Integer.parseInt(cutText.get(i-1));
-        //     int b = Integer.parseInt(cutText.get(i+1));
-        //     int c = 0;
-        //     System.out.println(a);
-        //     System.out.println(b);
-        //     // System.out.println(cutText.get(1)); 
-        //     System.out.println(cutText.get(i));
-        //     if(cutText.get(i) == "*"){
-        //         System.out.println(a);
-        //         c = a * b;
-        //         // System.out.println(a);
-        //     } else if(cutText.get(i) == "/") {
-        //         c = a / b;
-        //     } else {
-        //         c = a + b;
-        //     }
-        //     cutText.remove(i-1);
-        //     cutText.remove(i-1);
-        //     cutText.set(i-1, String.valueOf(c));
-        //     System.out.println(c);
-        // }
-          
+        while(cutText.indexOf("+") != -1 || cutText.indexOf("-") != -1 ){
+            if ((cutText.indexOf("+") < cutText.indexOf("-") && cutText.indexOf("+") != -1)  || cutText.indexOf("-") == -1){
+                result = Integer.valueOf(cutText.get(cutText.indexOf("+")-1)) + Integer.valueOf(cutText.get(cutText.indexOf("+")+1));
+                cutText.set(cutText.indexOf("+")-1, String.valueOf(result));
+                cutText.remove(cutText.indexOf("+")+1);
+                cutText.remove(cutText.indexOf("+"));
+                System.out.println(cutText);
+            }
+            if ((cutText.indexOf("-") < cutText.indexOf("+") && cutText.indexOf("-") != -1) || cutText.indexOf("+") == -1){
+                result = Integer.valueOf(cutText.get(cutText.indexOf("-")-1)) - Integer.valueOf(cutText.get(cutText.indexOf("-")+1));
+                cutText.set(cutText.indexOf("-")-1, String.valueOf(result));
+                cutText.remove(cutText.indexOf("-")+1);
+                cutText.remove(cutText.indexOf("-"));
+                System.out.println(cutText);
+            }
+        }
+        // System.out.println(result);
         return result;
     }
-
     public static void main(String[] args){        
         
         // HELPER CLASS
@@ -173,8 +148,8 @@ public class ExpressionParser {
             // new TestParams("60/12", 5),
             // new TestParams("0/3", 0),
             // new TestParams("10*8", 40),
-            new TestParams("100+4*5-8/4*2", 320),
-            // new TestParams("0/3", 0),
+            new TestParams("-100+4*5-32/4+4/4*2+2-66+5-10-2-2-6/14", 320),
+            // new TestParams("-100+4*5-32/4+4/4*2+2-66+5-10-2-2*6", 320),
             // new TestParams("0/3", 0),
             // new TestParams("0/3", 0),
             // new TestParams("3/0", 1),
@@ -193,6 +168,5 @@ public class ExpressionParser {
                 System.out.format(" %20s\n", "expected " + tests[i].value);
             }
         }
-
     }
 }
