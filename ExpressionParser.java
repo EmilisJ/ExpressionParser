@@ -222,7 +222,7 @@ public class ExpressionParser {
             // new TestParams("60/12", 5),
             // new TestParams("0/3", 0),
             // new TestParams("10*8", 80),
-            new TestParams("-(100+4*5-32/4+(4/4*2+2-66)+5-10)-2-2-6/2", 38),
+            // new TestParams("-(100+4*5-32/4+(4/4*2+2-66)+5-10)-2-2-6/2", 38),
             new TestParams("-(-100+4*-(5-32/4+4/4*(-2+16/-(2*5+14/6-4)+5+20)-10-2-4)+2*6+4)", -320),
             // new TestParams("0*3", 0),
             // new TestParams("0/3", 0),
