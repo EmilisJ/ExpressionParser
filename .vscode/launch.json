@@ -6,15 +6,16 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Debug (Launch) - Current File",
+            "name": "CodeLens (Launch) - ExpressionParser",
             "request": "launch",
-            "mainClass": "${file}"
+            "mainClass": "ExpressionParser",
+            "projectName": "ExpressionParser_3a111330"
         },
         {
             "type": "java",
-            "name": "Debug (Launch)-ExpressionParser",
+            "name": "Debug (Launch) - Current File",
             "request": "launch",
-            "mainClass": "ExpressionParser"
+            "mainClass": "${file}"
         }
     ]
 }
