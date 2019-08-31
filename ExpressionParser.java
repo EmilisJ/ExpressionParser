@@ -61,6 +61,8 @@ public class ExpressionParser {
         }
         cutText.add(number);
         
+        System.out.println(cutText);
+
         for(int i = 0; i < cutText.size(); ++i){
             if(cutText.indexOf("/") == i && cutText.indexOf("0") == i+1){
                 IllegalArgumentException f = new IllegalArgumentException("Emilis, you can't divede by 0!");
@@ -72,9 +74,21 @@ public class ExpressionParser {
             result = Integer.parseInt(cutText.get(0));
         } 
         
-        if(cutText.get(0).equals("-")){
+        if(cutText.get(0).equals("-") && "()+-*/".indexOf(cutText.get(1)) == -1){
             cutText.set(1, String.valueOf(Integer.valueOf(cutText.get(1)) * -1));
             cutText.remove(cutText.get(0));
+        }
+        
+        for(int i = 0; i < cutText.size(); ++i){
+            if(cutText.get(i).equals("-") && cutText.get(i+1).equals("(")){
+                cutText.set(i, "-1");
+                cutText.add(i+1, "*");
+                ++i;
+            } else if(cutText.get(i).equals("(") && cutText.get(i+1).equals("-")){
+                cutText.set(i+2, "-" + cutText.get(i+2));
+                cutText.remove(i+1);
+                --i;
+            }
         }
    
         System.out.println(cutText);
@@ -120,6 +134,7 @@ public class ExpressionParser {
                         System.out.println(inBrackets);
                     }
                 }
+                System.out.println(cutText);
                 // System.out.println(subA);
                 // System.out.println(subB);
                 cutText.set(subA, String.valueOf(result));
@@ -192,6 +207,7 @@ public class ExpressionParser {
             // new TestParams(")2+2(", 0), // starts or ends vith invalid op
             // new TestParams("3/0", 1),
             // new TestParams(" 4 51+2!!9+11+1Ų2ŪŪ.2", 503),
+            // new TestParams("8*(2+4)-(15-5)/2", 43), /doesnt work with sibling brackets
 
 
             // new TestParams("1", 1),
@@ -205,16 +221,15 @@ public class ExpressionParser {
             // new TestParams("3-6", -3),
             // new TestParams("60/12", 5),
             // new TestParams("0/3", 0),
-            // new TestParams("10*8", 40),
-            // new TestParams("-100+4*5-32/4+(4/4*2+2-66)+5-10-2-2-6/2", -132),
-            new TestParams("(-100+4*(5-32/4+4/4*(2+16-(2*5+14/6-66)+5+20)-10-2-4)+2*6+4)", 320),
+            // new TestParams("10*8", 80),
+            new TestParams("-(100+4*5-32/4+(4/4*2+2-66)+5-10)-2-2-6/2", 38),
+            new TestParams("-(-100+4*-(5-32/4+4/4*(-2+16/-(2*5+14/6-4)+5+20)-10-2-4)+2*6+4)", -320),
             // new TestParams("0*3", 0),
             // new TestParams("0/3", 0),
 
             // new TestParams("1+3", 4),
-            // new TestParams("9+8*4", 288),
+            // new TestParams("9+8*4", 41),
             // new TestParams("-1+18", 17),
-            // new TestParams("8*(2+4)-(15-5)/2", 43),
         };
         
         // run tests
