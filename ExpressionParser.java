@@ -1,7 +1,41 @@
 import java.util.*;
-// import com.sun.swing.internal.plaf.basic.resources.basic;
 
 public class ExpressionParser {
+
+    public static int calculate(String a, String b, String op){
+        int ai = Integer.valueOf(a);
+        int bi = Integer.valueOf(b);
+        if(op == "*"){
+            return ai * bi;
+        } else if (op == "/"){
+            return ai / bi;
+        } else if (op == "+"){
+            return ai + bi;
+        } else { // if (op == "-")
+            return ai - bi; // FIX ME throw exception if op invalid.
+        }
+    }
+    private static String getString(String slash, int x, ArrayList<String> inBrackets){
+        return inBrackets.get(inBrackets.indexOf(slash)+x);
+    }
+
+    public static void myFunction(String star, String slash, ArrayList<String> inBrackets){
+        if((inBrackets.indexOf(star) < inBrackets.indexOf(slash) && inBrackets.indexOf(star) != -1) || inBrackets.indexOf(slash) == -1){ 
+            // result = Integer.valueOf(inBrackets.get(inBrackets.indexOf(star)-1)) * Integer.valueOf(inBrackets.get(inBrackets.indexOf(star)+1));
+            int result = calculate(inBrackets.get(inBrackets.indexOf(star)-1), inBrackets.get(inBrackets.indexOf(star)+1), star);
+            inBrackets.set(inBrackets.indexOf(star)-1, String.valueOf(result));
+            inBrackets.remove(inBrackets.indexOf(star)+1);
+            inBrackets.remove(inBrackets.indexOf(star));
+            System.out.println(inBrackets);
+        } else if((inBrackets.indexOf(slash) < inBrackets.indexOf(star) && inBrackets.indexOf(slash) != -1) || inBrackets.indexOf(star) == -1){
+            // result = Integer.valueOf(inBrackets.get(inBrackets.indexOf(slash)-1)) / Integer.valueOf(inBrackets.get(inBrackets.indexOf(slash)+1));
+            int result = calculate(getString(slash, -1, inBrackets), getString(slash, +1, inBrackets), slash);
+            inBrackets.set(inBrackets.indexOf(slash)-1, String.valueOf(result));
+            inBrackets.remove(inBrackets.indexOf(slash)+1);
+            inBrackets.remove(inBrackets.indexOf(slash));
+            System.out.println(inBrackets);
+        }
+    }
 
     // This is the main function for you to implement
     public static int simplify(String expression){
@@ -40,9 +74,9 @@ public class ExpressionParser {
             }
         }
         if(openBracket != closeBracket){
-            IllegalArgumentException e = new IllegalArgumentException("Emilis, there is an opening or closing bracket missing.");
-            throw e;
+            throw new IllegalArgumentException("Emilis, there is an opening or closing bracket missing.");
         }
+        
         
         ArrayList<String> cutText = new ArrayList<String>();
         int result = 0;
@@ -61,9 +95,9 @@ public class ExpressionParser {
         }
         cutText.add(number);
         
-        System.out.println(cutText);
+        // System.out.println(cutText);
 
-        for(int i = 0; i < cutText.size(); ++i){
+        for(int i = 0; i < cutText.size()-1; ++i){
             if(cutText.indexOf("/") == i && cutText.indexOf("0") == i+1){
                 IllegalArgumentException f = new IllegalArgumentException("Emilis, you can't divede by 0!");
                 throw f;
@@ -101,38 +135,10 @@ public class ExpressionParser {
             System.out.println(inBrackets);
             while(inBrackets.size() > 1){
                 while(inBrackets.indexOf("*") != -1 || inBrackets.indexOf("/") != -1 ){
-                    if((inBrackets.indexOf("*") < inBrackets.indexOf("/") && inBrackets.indexOf("*") != -1) || inBrackets.indexOf("/") == -1){
-                        result = Integer.valueOf(inBrackets.get(inBrackets.indexOf("*")-1)) * Integer.valueOf(inBrackets.get(inBrackets.indexOf("*")+1));
-                        inBrackets.set(inBrackets.indexOf("*")-1, String.valueOf(result));
-                        inBrackets.remove(inBrackets.indexOf("*")+1);
-                        inBrackets.remove(inBrackets.indexOf("*"));
-                        System.out.println(inBrackets);
-                    } else if((inBrackets.indexOf("/") < inBrackets.indexOf("*") && inBrackets.indexOf("/") != -1) || inBrackets.indexOf("*") == -1){
-                        result = Integer.valueOf(inBrackets.get(inBrackets.indexOf("/")-1)) * Integer.valueOf(inBrackets.get(inBrackets.indexOf("/")+1));
-                        inBrackets.set(inBrackets.indexOf("/")-1, String.valueOf(result));
-                        inBrackets.remove(inBrackets.indexOf("/")+1);
-                        inBrackets.remove(inBrackets.indexOf("/"));
-                        System.out.println(inBrackets);
-                    }
+                    ExpressionParser.myFunction("*", "/", inBrackets);
                 }
                 while(inBrackets.indexOf("+") != -1 || inBrackets.indexOf("-") != -1 ){
-                    if ((inBrackets.indexOf("+") < inBrackets.indexOf("-") && inBrackets.indexOf("+") != -1)  || inBrackets.indexOf("-") == -1){
-                        result = Integer.valueOf(inBrackets.get(inBrackets.indexOf("+")-1)) + Integer.valueOf(inBrackets.get(inBrackets.indexOf("+")+1));
-                        inBrackets.set(inBrackets.indexOf("+")-1, String.valueOf(result));
-                        inBrackets.remove(inBrackets.indexOf("+")+1);
-                        inBrackets.remove(inBrackets.indexOf("+"));
-                        System.out.println(inBrackets);
-                    }else if ((inBrackets.indexOf("-") < inBrackets.indexOf("+") && inBrackets.indexOf("-") != -1) || inBrackets.indexOf("+") == -1){
-                        // System.out.println(inBrackets);
-                        // System.out.println("error");
-                        // System.out.println(inBrackets.get(inBrackets.indexOf("-")-1));
-                        // System.out.println(Integer.valueOf(inBrackets.get(inBrackets.indexOf("-")+1)));
-                        result = Integer.valueOf(inBrackets.get(inBrackets.indexOf("-")-1)) - Integer.valueOf(inBrackets.get(inBrackets.indexOf("-")+1));
-                        inBrackets.set(inBrackets.indexOf("-")-1, String.valueOf(result));
-                        inBrackets.remove(inBrackets.indexOf("-")+1);
-                        inBrackets.remove(inBrackets.indexOf("-"));
-                        System.out.println(inBrackets);
-                    }
+                    ExpressionParser.myFunction("+", "-", inBrackets);
                 }
                 System.out.println(cutText);
                 // System.out.println(subA);
@@ -147,39 +153,16 @@ public class ExpressionParser {
         }
         
         while(cutText.indexOf("*") != -1 || cutText.indexOf("/") != -1 ){
-            if((cutText.indexOf("*") < cutText.indexOf("/") && cutText.indexOf("*") != -1) || cutText.indexOf("/") == -1){
-                result = Integer.valueOf(cutText.get(cutText.indexOf("*")-1)) * Integer.valueOf(cutText.get(cutText.indexOf("*")+1));
-                cutText.set(cutText.indexOf("*")-1, String.valueOf(result));
-                cutText.remove(cutText.indexOf("*")+1);
-                cutText.remove(cutText.indexOf("*"));
-                System.out.println(cutText);
-            } else if ((cutText.indexOf("/") < cutText.indexOf("*") && cutText.indexOf("/") != -1) || cutText.indexOf("*") == -1){
-                result = Integer.valueOf(cutText.get(cutText.indexOf("/")-1)) / Integer.valueOf(cutText.get(cutText.indexOf("/")+1));
-                cutText.set(cutText.indexOf("/")-1, String.valueOf(result));
-                cutText.remove(cutText.indexOf("/")+1);
-                cutText.remove(cutText.indexOf("/"));
-                System.out.println(cutText);
-            }            
+            ExpressionParser.myFunction("*", "/", cutText);
         }
 
         while(cutText.indexOf("+") != -1 || cutText.indexOf("-") != -1 ){
-            if ((cutText.indexOf("+") < cutText.indexOf("-") && cutText.indexOf("+") != -1)  || cutText.indexOf("-") == -1){
-                result = Integer.valueOf(cutText.get(cutText.indexOf("+")-1)) + Integer.valueOf(cutText.get(cutText.indexOf("+")+1));
-                cutText.set(cutText.indexOf("+")-1, String.valueOf(result));
-                cutText.remove(cutText.indexOf("+")+1);
-                cutText.remove(cutText.indexOf("+"));
-                System.out.println(cutText);
-            } else if ((cutText.indexOf("-") < cutText.indexOf("+") && cutText.indexOf("-") != -1) || cutText.indexOf("+") == -1){
-                result = Integer.valueOf(cutText.get(cutText.indexOf("-")-1)) - Integer.valueOf(cutText.get(cutText.indexOf("-")+1));
-                cutText.set(cutText.indexOf("-")-1, String.valueOf(result));
-                cutText.remove(cutText.indexOf("-")+1);
-                cutText.remove(cutText.indexOf("-"));
-                System.out.println(cutText);
-            }
+            ExpressionParser.myFunction("+", "-", cutText);
         }
         System.out.println(result);
         return result;
     }
+
     
     public static void main(String[] args){        
     // HELPER CLASS
@@ -222,9 +205,9 @@ public class ExpressionParser {
             // new TestParams("60/12", 5),
             // new TestParams("0/3", 0),
             // new TestParams("10*8", 80),
-            // new TestParams("-(100+4*5-32/4+(4/4*2+2-66)+5-10)-2-2-6/2", 38),
-            new TestParams("-(-100+4*-(5-32/4+4/4*(-2+16/-(2*5+14/6-4)+5+20)-10-2-4)+2*6+4)", -320),
-            // new TestParams("0*3", 0),
+            new TestParams("-(100+4*5-32/4+(4/4*2+2-66)+5-10)-2-2-6/2", 38),
+            // new TestParams("-(-100+4*-(5-32/4+4/4*(-2+16/-(2*5+14/6-4)+5+20)-10-2-4)+2*6+4)", -320),
+            // new TestParams("(1+3+5)-(6+2+1)", 0),
             // new TestParams("0/3", 0),
 
             // new TestParams("1+3", 4),
